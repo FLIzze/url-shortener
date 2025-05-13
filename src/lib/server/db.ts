@@ -1,5 +1,5 @@
-import postgres from "postgres";
-
+import type { UrlMapResponse } from "$lib/types";
+import postgres, { type RowList } from "postgres";
 const sql = postgres({
         host: "localhost",
         port: 5432,
@@ -34,12 +34,29 @@ export async function insertUrlMapping(
     `;
 }
 
-export async function getUrlMapping(url: string): Promise<string> {
+export async function getUrlMapping(url: string): Promise<UrlMapResponse> {
         const result = await sql`
-                SELECT original_url, nbr_use, expiration FROM urlMap WHERE shortened_url = ${url};
+                SELECT original_url, nbr_use, expiration 
+                FROM urlMap WHERE shortened_url = ${url};
         `;
 
-        return result[0].original_url;
+        return result[0];
+}
+
+export async function handleNbrUse(url: string, nbr: number) {
+        if (nbr === 1) {
+                await sql`
+                        DELETE FROM urlMap 
+                        WHERE shortened_url = ${url};
+                `;
+        } else {
+                await sql`
+                        UPDATE urlMap 
+                        SET nbr_use = nbr_use - 1
+                        WHERE shortened_url = ${url};
+                `;
+        }
+
 }
 
 export default sql;

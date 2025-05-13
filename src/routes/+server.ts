@@ -1,4 +1,4 @@
-import { createTable, insertUrlMapping } from "$lib/server/db";
+import { insertUrlMapping } from "$lib/server/db";
 import { isValidHttpUrl } from "$lib/utils/isValidUrl";
 import { generateNewUrl } from "$lib/utils/generateNewUrl";
 import { json } from "@sveltejs/kit";
@@ -15,7 +15,7 @@ export async function POST({ request }: RequestEvent) {
         const shortened_url = generateNewUrl();
 
         try {
-                await createTable();
+                // await createTable();
                 await insertUrlMapping(url, shortened_url, nbr_use, expiration_date);
         } catch (error) {
                 console.error(`Error inserting : ${error}`);

@@ -14,7 +14,8 @@
 			});
 
 			if (!response.ok) {
-				throw new Error(`Error getting on ${url} : ${response.status}`);
+                                // shit way of doing it, will change
+                                window.location.replace("localhost:5173/");
 			}
 
 			const data = await response.json();
