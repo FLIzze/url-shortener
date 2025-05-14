@@ -14,14 +14,18 @@
 			});
 
 			if (!response.ok) {
-                                // shit way of doing it, will change
-                                window.location.replace("localhost:5173/");
+                                console.error(`No mapping for url : ${url}`);
 			}
 
 			const data = await response.json();
-                        window.location.replace(data.original_url);
+
+                        if (data.status === 200) {
+                                window.location.replace(data.original_url);
+                        }
 		} catch (err) {
 			console.error(err);
 		}
 	});
 </script>
+
+<a>404</a>
