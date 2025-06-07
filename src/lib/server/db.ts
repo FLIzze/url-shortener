@@ -1,11 +1,21 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import type { UrlMapResponse } from "$lib/types";
 import postgres from "postgres";
+
+const HOST = process.env.HOST;
+const PORT = process.env.PORT;
+const DATABASE = process.env.DATABASE;
+const USERNAME = process.env.USERNAME;
+const PASSWORD = process.env.PASSWORD;
+
 const sql = postgres({
-        host: "localhost",
-        port: 5432,
-        database: "shortener",
-        username: "abel",
-        password: "1231",
+        host: HOST,
+        port: Number(PORT),
+        database: DATABASE,
+        username: USERNAME,
+        password: PASSWORD,
 });
 
 export async function createTable() {
@@ -33,7 +43,7 @@ export async function insertUrlMapping(
 }
 
 export async function getUrlMapping(url: string): Promise<UrlMapResponse> {
-        const result = await sql`
+        const result = await sql<UrlMapResponse[]>`
                 SELECT original_url, nbr_use
                 FROM urlMap WHERE shortened_url = ${url};
         `;

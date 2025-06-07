@@ -7,10 +7,10 @@
 		url?: string;
 	}
 
-	let url = $state('');
-	let alertMessage = $state('');
-	let display = $state(false);
-	let error = $state(false);
+	let url = '';
+	let alertMessage = '';
+	let display = false;
+	let error = false;
 
 	async function handleSubmit() {
 		const response = await fetch('/', {
@@ -41,7 +41,9 @@
 			return;
 		}
 
-		alertMessage = `http://localhost:5173/${data.url}`;
+		const domainName = window.location.hostname;
+		const port = window.location.port;
+		alertMessage = `http://${domainName}:${port}/${data.url}`;
 		navigator.clipboard.writeText(alertMessage);
 	}
 </script>
