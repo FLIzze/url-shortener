@@ -14,18 +14,18 @@
 			});
 
 			if (!response.ok) {
-                                console.error(`No mapping for url : ${url}`);
+				console.error(`No mapping for url : ${url}`);
 			}
 
 			const data = await response.json();
 
-                        if (data.status === 200) {
-                                window.location.replace(data.original_url);
-                        }
+			if (data.status === 200) {
+				window.location.replace(data.original_url);
+			}
 		} catch (err) {
 			console.error(err);
 		}
 	});
 </script>
 
-<a>404</a>
+<p>404</p>

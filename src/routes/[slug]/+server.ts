@@ -1,5 +1,4 @@
 import { getUrlMapping, handleNbrUse } from "$lib/server/db";
-import type { UrlMapResponse } from "$lib/types";
 import { json } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
 
@@ -10,13 +9,10 @@ export async function GET({ request }: RequestEvent) {
         let og_url = "";
 
         try {
-                const { original_url, nbr_use }: UrlMapResponse = await getUrlMapping(shortened_url);
+                const { original_url } = await getUrlMapping(shortened_url);
                 og_url = original_url;
 
-                if (nbr_use > 0) {
-                        handleNbrUse(shortened_url, nbr_use);
-                }
-
+                handleNbrUse(shortened_url);
         } catch (error) {
                 console.error(`Error getting : ${error}`);
                 return json({ status: 500, message: "Error getting URL", original_url: "" });

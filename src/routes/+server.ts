@@ -5,7 +5,7 @@ import { json } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function POST({ request }: RequestEvent) {
-        const { url, date: expiration_date, nbr_use } = await request.json();
+        const { url } = await request.json();
 
         if (!isValidHttpUrl(url)) {
                 console.error(`Url is not valid : ${url}`);
@@ -16,7 +16,7 @@ export async function POST({ request }: RequestEvent) {
 
         try {
                 // await createTable();
-                await insertUrlMapping(url, shortened_url, nbr_use, expiration_date);
+                await insertUrlMapping(url, shortened_url);
         } catch (error) {
                 console.error(`Error inserting : ${error}`);
                 return json({ status: 500, message: "Internal server error" });
