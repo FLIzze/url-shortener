@@ -28,4 +28,22 @@
 	});
 </script>
 
-<p>404</p>
+<div class="container">
+	<p>This link does not exist</p>
+	<p>You can create one <a href="http://localhost:5173">here</a></p>
+</div>
+
+<style>
+	.container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		height: 100vh;
+		align-items: center;
+		gap: 10px;
+	}
+	p {
+		margin: 0;
+		padding: 0;
+	}
+</style>
