@@ -10,7 +10,7 @@
 	let url = '';
 	let alertMessage = '';
 	let display = false;
-	let error = false;
+	let severity: 'Success' | 'Error';
 
 	async function handleSubmit() {
 		const response = await fetch('/', {
@@ -28,8 +28,8 @@
 		const data: UrlShortenResponse = await response.json();
 
 		url = '';
-		error = false;
 		display = true;
+		severity = 'Success';
 
 		setTimeout(() => {
 			display = false;
@@ -37,30 +37,37 @@
 
 		if (data.status !== 200) {
 			alertMessage = data.message;
-			error = true;
+			severity = 'Error';
 			return;
 		}
 
 		const domainName = window.location.hostname;
 		const port = window.location.port;
-		alertMessage = `http://${domainName}:${port}/${data.url}`;
-		navigator.clipboard.writeText(alertMessage);
+
+		navigator.clipboard.writeText(`http://${domainName}:${port}/${data.url}`);
+		alertMessage = 'Copied to clipboard !';
 	}
 </script>
 
 <div class="container">
 	<form onsubmit={handleSubmit} class="form">
-		<input type="text" bind:value={url} placeholder="Url" />
-		<button type="submit">Shorten</button>
+		<input type="text" bind:value={url} placeholder="url" class="input" />
+		<button type="submit" class="button">Shorten</button>
 	</form>
 
-	<Alerte {alertMessage} {display} {error} />
+	<Alerte {alertMessage} {display} {severity} />
 </div>
 
 <style>
-	:global(html, body) {
+	@font-face {
+		font-family: 'roboto';
+		src: url('/fonts/Roboto-Medium.ttf');
+	}
+
+	:global(*) {
 		margin: 0;
 		padding: 0;
+		font-family: roboto;
 	}
 
 	.container {
@@ -69,12 +76,42 @@
 		justify-content: center;
 		align-items: center;
 		display: flex;
-		background-color: black;
+		background-color: white;
 	}
 
 	.form {
 		display: flex;
 		flex-direction: column;
 		gap: 5px;
+	}
+	.button {
+		background-color: white;
+		border: solid;
+		border-width: 2px;
+		border-radius: 4px;
+		height: 30px;
+		transition: all 0.5s;
+		cursor: pointer;
+	}
+	.button:hover {
+		background-color: black;
+		color: white;
+		border-color: black;
+	}
+	.input {
+		transition: all 0.5s;
+		background-color: white;
+		border: none;
+		border-bottom: solid;
+		border-width: 2px;
+		height: 30px;
+		text-align: center;
+	}
+	.input:focus {
+		outline: none;
+		border-color: red;
+	}
+	.input:focus::placeholder {
+		color: transparent;
 	}
 </style>
